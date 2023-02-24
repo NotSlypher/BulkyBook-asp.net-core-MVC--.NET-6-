@@ -1,7 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +11,6 @@ using System.Threading.Tasks;
 using BulkyBook.DataAccess.Repository.IRepository;
 using BulkyBook.Models;
 using BulkyBook.Utility;
-using BulkyBookWeb.Migrations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -48,13 +45,13 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
             IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _roleManager = roleManager;
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -109,6 +106,7 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
             [Required]
             public string Name { get; set; }
             public string? StreetAddress { get; set; }
@@ -116,12 +114,12 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
             public string? State { get; set; }
             public string? PostalCode { get; set; }
             public string? PhoneNumber { get; set; }
-            public string Role { get; set; }
+            public string? Role { get; set; }
             public int? CompanyId { get; set; }
             [ValidateNever]
-            public IEnumerable<SelectListItem>Rolelist { get; set; }
+            public IEnumerable<SelectListItem> RoleList { get; set; }
             [ValidateNever]
-            public IEnumerable<SelectListItem>CompanyList { get; set; }
+            public IEnumerable<SelectListItem> CompanyList { get; set; }
         }
 
 
@@ -131,15 +129,14 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
             {
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Employee)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Comp)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Indi)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Comp)).GetAwaiter().GetResult();
             }
-
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             Input = new InputModel()
             {
-                Rolelist = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
                 {
                     Text = i,
                     Value = i
@@ -152,7 +149,7 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
             };
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -164,13 +161,11 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 user.StreetAddress = Input.StreetAddress;
                 user.City = Input.City;
-                user.PostalCode = Input.PostalCode;
-                user.StreetAddress = Input.StreetAddress;
-                user.Name = Input.Name;
                 user.State = Input.State;
+                user.PostalCode = Input.PostalCode;
+                user.Name = Input.Name;
                 user.PhoneNumber = Input.PhoneNumber;
-                if (Input.Role== SD.Role_User_Comp)
-                {
+                if (Input.Role == SD.Role_User_Comp) {
                     user.CompanyId = Input.CompanyId;
                 }
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -179,8 +174,7 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    if (Input.Role == null)
-                    {
+                    if (Input.Role == null) {
                         await _userManager.AddToRoleAsync(user, SD.Role_User_Indi);
                     }
                     else

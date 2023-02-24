@@ -1,14 +1,14 @@
-﻿using System;
+﻿using BulkyBook.DataAccess.Repository.IRepository;
+using BulkyBook.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BulkyBook.DataAccess.Repository.IRepository;
-using BulkyBook.Models;
 
 namespace BulkyBook.DataAccess.Repository
 {
-    public class CategoryRepository: Repository<Category>, ICategoryRepository
+    public class CategoryRepository : Repository<Category>, ICategoryRepository
     {
         private ApplicationDbContext _db;
 
@@ -16,6 +16,7 @@ namespace BulkyBook.DataAccess.Repository
         {
             _db = db;
         }
+
 
         public void Update(Category obj)
         {

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using BulkyBook.DataAccess.Repository.IRepository;
+using BulkyBook.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BulkyBook.DataAccess.Repository.IRepository;
-using BulkyBook.Models;
 
 namespace BulkyBook.DataAccess.Repository
 {
@@ -17,9 +17,10 @@ namespace BulkyBook.DataAccess.Repository
             _db = db;
         }
 
+
         public void Update(Product obj)
         {
-            var objFromDb = _db.Products.FirstOrDefault(p => p.Id == obj.Id);
+            var objFromDb = _db.Products.FirstOrDefault(u => u.Id == obj.Id);
             if (objFromDb != null)
             {
                 objFromDb.Title = obj.Title;
@@ -34,7 +35,7 @@ namespace BulkyBook.DataAccess.Repository
                 objFromDb.CoverTypeId = obj.CoverTypeId;
                 if (obj.ImageUrl != null)
                 {
-                    objFromDb.ImageUrl = obj.ImageUrl;
+                    objFromDb.ImageUrl = obj.ImageUrl;  
                 }
             }
         }
