@@ -9,6 +9,6 @@
     <div class="col-12 text-center" style="color:maroon">
         <br />
         Your payment has been applied successfully! <br />
-        <a asp-area="Admin" asp-controller="Order" asp-action="Details">Back to order details</a>
+        <a asp-area="Admin" asp-controller="Order" asp-action="Details" asp-route-orderId="@Model" class="btn btn-primary">Back to order details</a>
     </div>
 </div>
