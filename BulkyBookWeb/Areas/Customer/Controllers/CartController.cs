@@ -60,14 +60,14 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             }
 
             string body =
-                "<h1>Order Confirmation</h1>\r\n\t<p>Dear " + orderHeader.ApplicationUser.Name + ",</p>\r\n\t<p>Thank you for your recent purchase with us. We are pleased to confirm that your order has been received and is being processed. Here are the details of your order:</p>\r\n\t<table>\r\n\t\t<tr>\r\n\t\t\t<th>Product</th>\r\n\t\t\t<th>Quantity</th>\r\n\t\t\t<th>Price</th>\r\n\t\t</tr>";
+                "<h1>Order Confirmation</h1>\r\n\t<p>Dear " + orderHeader.ApplicationUser.Name + ",</p>\r\n\t<p>Thank you for your recent purchase with us. We are pleased to confirm that your order has been received and is being processed. Here are the details of your order:</p>\r\n\t<table>\r\n\t\t<tr>\r\n\t\t\t<th></th>\r\n\t\t\t<th>Product</th>\r\n\t\t\t<th>Quantity</th>\r\n\t\t\t<th>Price</th>\r\n\t\t</tr>";
             foreach (var cart in ShoppingCartVM.ListCart)
             {
-                body += "\r\n\t\t<tr>\r\n\t\t\t<td>" + cart.Product.Title + "</td>\r\n\t\t\t<td>" + cart.Count + "</td>\r\n\t\t\t<td>" + cart.Price * cart.Count + "</td>\r\n\t\t</tr>";
+                body += "\r\n\t\t<tr>\r\n\t\t\t<td> <img src=\"" + cart.Product.ImageUrl + "\"/></td>\r\n\t\t\t<td>" + cart.Product.Title + "</td>\r\n\t\t\t<td>" + cart.Count + "</td>\r\n\t\t\t<td>" + cart.Price * cart.Count + "</td>\r\n\t\t</tr>";
             }
 
             body +=
-                "\r\n\t\t<tr>\r\n\t\t\t<td colspan=\"2\">Total:</td>\r\n\t\t\t<td>" + ShoppingCartVM.OrderHeader.OrderTotal + "</td>\r\n\t\t</tr>\r\n\t</table>\r\n\t<p>Your order will be shipped to the following address:</p>\r\n\t<p>" + orderHeader.ApplicationUser.StreetAddress + ", " + orderHeader.ApplicationUser.City + " " + orderHeader.ApplicationUser.PostalCode + ", " + orderHeader.ApplicationUser.State + "</p>\r\n\t<p>If you have any questions or concerns regarding your order, please do not hesitate to contact us.</p>\r\n\t<p>Thank you for choosing our company, and we look forward to serving you again in the future.</p>\r\n\t<p>Sincerely,</p>\r\n\t<p>The BulkyBook Team</p>";
+                "\r\n\t\t<tr>\r\n\t\t\t<td></td>\r\n\t\t\t<td colspan=\"2\">Total:</td>\r\n\t\t\t<td>" + ShoppingCartVM.OrderHeader.OrderTotal + "</td>\r\n\t\t</tr>\r\n\t</table>\r\n\t<p>Your order will be shipped to the following address:</p>\r\n\t<p>" + orderHeader.ApplicationUser.StreetAddress + ", " + orderHeader.ApplicationUser.City + " " + orderHeader.ApplicationUser.PostalCode + ", " + orderHeader.ApplicationUser.State + "</p>\r\n\t<p>If you have any questions or concerns regarding your order, please do not hesitate to contact us.</p>\r\n\t<p>Thank you for choosing our company, and we look forward to serving you again in the future.</p>\r\n\t<p>Sincerely,</p>\r\n\t<p>The BulkyBook Team</p>";
             _emailSender.SendEmailAsync(orderHeader.ApplicationUser.Email, "New Order - BulkyBook", body);
 			List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart
 				.GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
