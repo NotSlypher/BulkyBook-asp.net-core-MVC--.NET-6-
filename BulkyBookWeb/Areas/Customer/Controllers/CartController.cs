@@ -60,7 +60,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             }
 
             string body =
-                "<h1>Order Confirmation</h1>\r\n\t<p>Dear" + orderHeader.ApplicationUser.Name + ",</p>\r\n\t<p>Thank you for your recent purchase with us. We are pleased to confirm that your order has been received and is being processed. Here are the details of your order:</p>\r\n\t<table>\r\n\t\t<tr>\r\n\t\t\t<th>Product</th>\r\n\t\t\t<th>Quantity</th>\r\n\t\t\t<th>Price</th>\r\n\t\t</tr>";
+                "<h1>Order Confirmation</h1>\r\n\t<p>Dear " + orderHeader.ApplicationUser.Name + ",</p>\r\n\t<p>Thank you for your recent purchase with us. We are pleased to confirm that your order has been received and is being processed. Here are the details of your order:</p>\r\n\t<table>\r\n\t\t<tr>\r\n\t\t\t<th>Product</th>\r\n\t\t\t<th>Quantity</th>\r\n\t\t\t<th>Price</th>\r\n\t\t</tr>";
             foreach (var cart in ShoppingCartVM.ListCart)
             {
                 body += "\r\n\t\t<tr>\r\n\t\t\t<td>" + cart.Product.Title + "</td>\r\n\t\t\t<td>" + cart.Count + "</td>\r\n\t\t\t<td>" + cart.Price * cart.Count + "</td>\r\n\t\t</tr>";
