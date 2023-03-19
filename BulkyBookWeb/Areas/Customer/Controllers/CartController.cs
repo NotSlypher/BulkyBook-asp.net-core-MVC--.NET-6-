@@ -6,6 +6,7 @@ using BulkyBook.Models;
 using BulkyBook.Models.ViewModels;
 using BulkyBook.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -87,9 +88,13 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 		public IActionResult Minus(int cartId)
 		{
 			var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == cartId);
-			if (cart.Count == 1)
-				_unitOfWork.ShoppingCart.Remove(cart);
-			else
+            if (cart.Count == 1)
+            {
+                _unitOfWork.ShoppingCart.Remove(cart); 
+                var count = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count - 1;
+                HttpContext.Session.SetInt32(SD.SessionCart, count);
+            }
+            else
 				_unitOfWork.ShoppingCart.DecrementCount(cart, 1);
 			_unitOfWork.Save();
 			return RedirectToAction(nameof(Index));
@@ -100,6 +105,8 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 			var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == cartId);
 			_unitOfWork.ShoppingCart.Remove(cart);
 			_unitOfWork.Save();
+            var count = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count;
+			HttpContext.Session.SetInt32(SD.SessionCart, count);
 			return RedirectToAction(nameof(Index));
 		}
 
