@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -14,10 +15,13 @@ namespace BulkyBook.Models
     {
         [Required]
         public string Name { get; set; }
+        [DisplayName("Street Address")]
         public string? StreetAddress { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
+        [DisplayName("Postal Code")]
         public string? PostalCode { get; set; }
+        [DisplayName("Company Id")]
         public int? CompanyId { get; set; }
         [ForeignKey("CompanyId")]
         [ValidateNever]

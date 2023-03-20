@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -109,10 +110,13 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
 
             [Required]
             public string Name { get; set; }
+            [DisplayName("Street Address")]
             public string? StreetAddress { get; set; }
             public string? City { get; set; }
             public string? State { get; set; }
+            [DisplayName("Postal Code")]
             public string? PostalCode { get; set; }
+            [DisplayName("Phone Number")]
             public string? PhoneNumber { get; set; }
             public string? Role { get; set; }
             public int? CompanyId { get; set; }
