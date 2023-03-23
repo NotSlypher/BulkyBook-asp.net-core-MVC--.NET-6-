@@ -1,3 +1,6 @@
+Live site link:
+https://bulkydata.azurewebsites.net/
+
 Bulky Book – Online Book Store
 
 Tech Stack: ASP.NET Core MVC, SSMS, AJAX
