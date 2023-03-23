@@ -1,5 +1,7 @@
 ﻿@model BulkyBook.Models.ViewModels.ShoppingCartVM
 @using Microsoft.Extensions.Options
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @inject IOptions<BulkyBook.Utility.StripeSettings> Stripe
 
 <form method="post">
@@ -92,12 +94,12 @@
 										    <h6 class="my-0">@details.Product.Title</h6>
 										    <small class="text-muted">Quantity: @details.Count</small>
 									    </div>
-									    <span class="text-muted">@((details.Price * details.Count).ToString("c"))</span>
+										<span class="text-muted">@((details.Price * details.Count).ToString("c", CultureInfo.CreateSpecificCulture("en-IN")))</span>
 								    </li>
 								}
 								<li class="list-group-item d-flex justify-content-between bg-light">
 									<small class="text-info">Total (INR)</small>
-									<strong class="text-info">@Model.OrderHeader.OrderTotal.ToString("c")</strong>
+									<strong class="text-info">@Model.OrderHeader.OrderTotal.ToString("c", CultureInfo.CreateSpecificCulture("en-IN"))</strong>
 								</li>
 							</ul>
 						</div>
@@ -108,7 +110,7 @@
 				<div class="row">
 					<div class="col-12 col-md-8 pt-2">
                         <p style="color:maroon; font-size:14px;">Estimate Arrival Date: 
-							@DateTime.Now.AddDays(7).ToShortDateString() - @DateTime.Now.AddDays(14).ToShortDateString()
+							@DateTime.Now.AddDays(7).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) - @DateTime.Now.AddDays(14).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
 						</p>
 					</div>
 					<div class="col-12 col-md-4">

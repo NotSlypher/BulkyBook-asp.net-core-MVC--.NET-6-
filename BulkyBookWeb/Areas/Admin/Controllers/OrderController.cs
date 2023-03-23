@@ -54,7 +54,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 includeProperties: "ApplicationUser");
             OrderVM.OrderDetail = _unitOfWork.OrderDetail.GetAll(u => u.OrderId == OrderVM.OrderHeader.Id, includeProperties: "Product");
 
-            var domain = "https://localhost:44300/";
+            var domain = "https://bulkydata.azurewebsites.net/";
             var options = new SessionCreateOptions
             {
                 PaymentMethodTypes = new List<string>

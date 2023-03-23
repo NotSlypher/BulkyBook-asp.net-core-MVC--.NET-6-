@@ -72,6 +72,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             _emailSender.SendEmailAsync(orderHeader.ApplicationUser.Email, "New Order - BulkyBook", body);
 			List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart
 				.GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
+            HttpContext.Session.Clear();
 			_unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
 			_unitOfWork.Save();
 			return View(id);
@@ -207,7 +208,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 			//Stripe Setting
 			if (applicationUser.CompanyId.GetValueOrDefault() == 0)
 			{
-				var domain = "https://localhost:44300/";
+				var domain = "https://bulkydata.azurewebsites.net/";
 				var options = new SessionCreateOptions
 				{
 					PaymentMethodTypes = new List<string>

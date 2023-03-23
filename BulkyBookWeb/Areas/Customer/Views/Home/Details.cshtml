@@ -1,4 +1,5 @@
-﻿@model ShoppingCart
+﻿@using System.Globalization
+@model ShoppingCart
 
 <form method="post">
     <input hidden asp-for="ProductId"/>
@@ -22,7 +23,7 @@
                             <h5 class="text-muted">ISBN : @Model.Product.ISBN</h5>
                         </div>
                         <div class="row pl-2">
-                            <h5 class="text-muted pb-2">List Price: <strike>@Model.Product.ListPrice.ToString("c")</strike></h5>
+                            <h5 class="text-muted pb-2">List Price: <strike>@Model.Product.ListPrice.ToString("c", CultureInfo.CreateSpecificCulture("en-IN"))</strike></h5>
                         </div>
                         <div class="row text-center pl-2">
                             <div class="p-1 col-2 bg-secondary border-bottom">
@@ -43,21 +44,22 @@
                                 <div>Price</div>
                             </div>
                             <div class="p-1 col-2 bg-secondary">
-                                <div>@Model.Product.Price.ToString("c")</div>
+                                <div>@Model.Product.Price.ToString("c", CultureInfo.CreateSpecificCulture("en-IN"))</div>
                             </div>
                             <div class="p-1 col-2 bg-secondary">
-                                <div>@Model.Product.Price50.ToString("c")</div>
+                                <div>@Model.Product.Price50.ToString("c", CultureInfo.CreateSpecificCulture("en-IN"))</div>
                             </div>
                             <div class="p-1 col-2 bg-secondary">
-                                <div>@Model.Product.Price100.ToString("c")</div>
+                                <div>@Model.Product.Price100.ToString("c", CultureInfo.CreateSpecificCulture("en-IN"))</div>
                             </div>
                         </div>
                         <div class="row pl-2">
                             <p class="text-secondary">@Html.Raw(Model.Product.Description)</p>
                         </div>
                         <div class="row pl-2">
-                            <div class="col-2 text-primary"><h4>Count</h4></div>
+                            <div class="text-primary pt-2"><h4>Count</h4></div>
                             <div class="col-2"><input asp-for="Count" class="form-control"/></div>
+                            <span asp-validation-for="Count" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-12 col-lg-3 offset-lg-1 text-center">
@@ -78,3 +80,10 @@
         </div>
     </div>
 </form>
+
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
