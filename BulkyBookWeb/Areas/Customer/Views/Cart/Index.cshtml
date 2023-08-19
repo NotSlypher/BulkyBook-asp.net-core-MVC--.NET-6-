@@ -24,8 +24,14 @@
 						<img src="@item.Product.ImageUrl" class="rounded" width="100%" />
 					</div>
 					<div class="col-12 col-lg-6 pt-md-3">
-							<h5><strong>@item.Product.Title</strong></h5>
-							<p><small>@Html.Raw(item.Product.Description.Substring(0, (item.Product.Description.IndexOf("\n"))))</small></p>
+                        <h5><strong>@item.Product.Title</strong></h5>
+                        @{
+                            int nextLinePos = (item.Product.Description.IndexOf("\n"));
+                            string description = item.Product.Description;
+                            if (nextLinePos != -1)
+                                description = description.Substring(0, (item.Product.Description.IndexOf("\n")));
+                        }
+                        <p><small>@Html.Raw(description)</small></p>
 					</div>
 					<div class="col-12  col-lg-5 text-center row">
 						<div class="col-4 text-md-right pt-4">
@@ -40,7 +46,7 @@
 									<i class="bi bi-dash-square"></i>
 								</a>
 							</div>
-
+					
 						</div>
 						<div class="col-2 col-sm-4 col-lg-2 text-right pt-2">
 							<a asp-action="Remove" asp-route-cartId="@item.Id" class="btn btn-danger">
@@ -48,7 +54,7 @@
 							</a>
 						</div>
 					</div>
-				</div>
+				    </div>
 					<hr />
 				}
 				<div class="row">
@@ -61,7 +67,7 @@
 						</ul>
 					</div>
 				</div>
-
+			
 			</div>
 
 			<div class="card-footer">

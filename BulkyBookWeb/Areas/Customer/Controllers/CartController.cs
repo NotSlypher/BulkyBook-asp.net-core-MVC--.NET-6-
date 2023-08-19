@@ -112,22 +112,29 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 		}
 
 		public IActionResult Index()
-		{
+        {
 			var claimsIdentity = (ClaimsIdentity)User.Identity;
 			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-			ShoppingCartVM = new ShoppingCartVM()
+			try
 			{
-				ListCart = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == claim.Value, includeProperties: "Product"),
-				OrderHeader = new()
-			};
-			foreach(var cart in ShoppingCartVM.ListCart)
-			{
-				cart.Price = GetPriceBasedOnQuantity(cart.Count, cart.Product.Price, cart.Product.Price50, cart.Product.Price100);
-				ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
+				ShoppingCartVM = new ShoppingCartVM()
+				{
+					ListCart = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == claim.Value, includeProperties: "Product"),
+					OrderHeader = new()
+				};
+				foreach (var cart in ShoppingCartVM.ListCart)
+				{
+					cart.Price = GetPriceBasedOnQuantity(cart.Count, cart.Product.Price, cart.Product.Price50, cart.Product.Price100);
+					ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
+				}
+                return View(ShoppingCartVM);
 			}
+			catch (System.Exception exception)
+			{
 
-			return View(ShoppingCartVM);
+				return null;
+			}
 		}
 
 		public IActionResult Summary()
